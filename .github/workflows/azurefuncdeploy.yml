@@ -25,6 +25,8 @@ jobs:
           cd AzureStorageQueueTriggerFunction
           zip -r ../AzureStorageQueueTriggerFunction.zip ./*
 
+
+    # These secrets should be added to your GitHub repository's secrets settings.
       - name: 'Az CLI login'
         uses: azure/login@v1
         with:
@@ -41,6 +43,6 @@ jobs:
       - name: Build and Deploy to Azure
         run: |
           az functionapp deployment source config-zip \
-            --resource-group "costoptimizationsas" \
-            --name "queuetriggereddemo" \
+            --resource-group "demofunctionapp-rg" \
+            --name "demofunctionappjp" \
             --src "./AzureStorageQueueTriggerFunction.zip"
