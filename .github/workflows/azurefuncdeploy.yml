@@ -59,7 +59,7 @@ jobs:
           az functionapp deployment source config-zip \
             --resource-group "demofunctionapp-rg" \
             --name "pythonfunctionappjp" \
-            --src "./AzureFunctionDeploy.zip.zip"
+            --src "./AzureFunctionDeploy.zip"
 
       - name: Build and Deploy to Azure Queue Function
         run: |
