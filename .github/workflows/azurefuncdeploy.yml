@@ -14,13 +14,24 @@ jobs:
           python-version: "3.11"
           architecture: x64
 
-      - name: Install required python modules
+      - name: Install required python modules AzureFunctionDeploy
         run: |
-            cd ./AzureStorageQueueTriggerFunction
-            python -m pip install --upgrade pip
-            pip install --target="./.python_packages/lib/site-packages" -r requirements.txt 
+          cd ./AzureFunctionDeploy
+          python -m pip install --upgrade pip
+          pip install --target="./.python_packages/lib/site-packages" -r requirements.txt 
 
-      - name: Zip the Azure Function Deploy folder
+      - name: Zip the Azure Python Function Deploy folder
+        run: |
+          cd AzureFunctionDeploy
+          zip -r ../AzureFunctionDeploy.zip ./*
+
+      - name: Install required python modules AzureStorageQueueTriggerFunction
+        run: |
+          cd ./AzureStorageQueueTriggerFunction
+          python -m pip install --upgrade pip
+          pip install --target="./.python_packages/lib/site-packages" -r requirements.txt 
+
+      - name: Zip the Azure Function Deploy folder AzureStorageQueueTriggerFunction
         run: |
           cd AzureStorageQueueTriggerFunction
           zip -r ../AzureStorageQueueTriggerFunction.zip ./*
@@ -42,9 +53,15 @@ jobs:
       - name: 'Run az commands'
         run: |
           az account show
-          az group list
     
-      - name: Build and Deploy to Azure
+      - name: Build and Deploy to Azure Python Function
+        run: |
+          az functionapp deployment source config-zip \
+            --resource-group "demofunctionapp-rg" \
+            --name "pythonfunctionappjp" \
+            --src "./AzureFunctionDeploy.zip.zip"
+
+      - name: Build and Deploy to Azure Queue Function
         run: |
           az functionapp deployment source config-zip \
             --resource-group "demofunctionapp-rg" \
