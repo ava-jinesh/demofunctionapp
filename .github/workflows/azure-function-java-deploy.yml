@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_NAME: pythonfunctionappjp
+  AZURE_FUNCTIONAPP_NAME: 'javafunctionappjp'
   FUNCTION_PROJECT_PATH: 'AzureJavaFunctionDeploy'  # Corrected variable name
   JAVA_VERSION: '11'
 
