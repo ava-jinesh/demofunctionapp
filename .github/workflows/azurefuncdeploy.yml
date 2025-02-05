@@ -25,7 +25,7 @@ jobs:
           cd AzureFunctionDeploy
           zip -r ../AzureFunctionDeploy.zip ./*
 
-      # - name: Install required python modules AzureStorageQueueTriggerFunction ssdsd
+      # - name: Install required python modules AzureStorageQueueTriggerFunction 
       #   run: |
       #     cd ./AzureStorageQueueTriggerFunction
       #     python -m pip install --upgrade pip
