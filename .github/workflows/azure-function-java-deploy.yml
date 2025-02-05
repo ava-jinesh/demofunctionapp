@@ -1,0 +1,54 @@
+name: Deploy Java Function App to Azure
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_NAME: pythonfunctionappjp
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'AzureJavaFunctionDeploy'
+  JAVA_VERSION: '11'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ env.JAVA_VERSION }}
+        distribution: 'temurin'
+
+    - name: Navigate to function project directory
+      run: cd ${{ env.FUNCTION_PROJECT_PATH }}
+
+    - name: Build with Maven
+      run: mvn clean package
+
+    - name: Zip the Azure Python Function Deploy folder
+      run: |
+        cd AzureFunctionDeploy
+        zip -r ../AzureFunctionJavaDeploy.zip ./*
+
+    - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+            }
+
+
+    - name: Build and Deploy to Azure Python Function
+      run: |
+        az functionapp deployment source config-zip \
+          --resource-group "demofunctionapp-rg" \
+          --name "pythonfunctionappjp" \
+          --src "./AzureFunctionJavaDeploy.zip"   
